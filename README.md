@@ -6,5 +6,5 @@
 
 ## 参考
 
-(http://ftvoid.com/blog/post/1379)
+http://ftvoid.com/blog/post/1379
 
