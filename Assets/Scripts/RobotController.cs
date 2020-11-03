@@ -75,12 +75,14 @@ public class RobotController : MonoBehaviour {
 
         // 車輪目標速度設定
         JointMotor motor = wheelLeft.motor;
-        //motor.targetVelocity = speed - output;
+        motor.targetVelocity = speed - output;
+        /*
         motor.force = -50;
         motor.targetVelocity = 900;
         motor.freeSpin = false;
         wheelLeft.motor = motor;
         wheelLeft.useMotor = true;
+        */
 
         motor = wheelRight.motor;
         motor.targetVelocity = speed + output;
