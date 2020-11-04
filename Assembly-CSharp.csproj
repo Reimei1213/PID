@@ -61,6 +61,9 @@
      <Compile Include="Assets\Scripts\IlluminanceSensor.cs" />
      <Compile Include="Assets\Scripts\Move.cs" />
      <Compile Include="Assets\Scripts\RobotController.cs" />
+     <Compile Include="Assets\Scripts\Test.cs" />
+     <Compile Include="Assets\Scripts\Test1.cs" />
+     <Compile Include="Assets\Scripts\Test_body.cs" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>/Users/reimei/Hack/Unity/PID/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>

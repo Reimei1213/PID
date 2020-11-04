@@ -8,6 +8,9 @@
           <e p="IlluminanceSensor.cs" t="Include" />
           <e p="Move.cs" t="Include" />
           <e p="RobotController.cs" t="Include" />
+          <e p="Test.cs" t="Include" />
+          <e p="Test1.cs" t="Include" />
+          <e p="Test_body.cs" t="Include" />
         </e>
       </e>
       <e p="obj" t="ExcludeRecursive" />
