@@ -31,6 +31,8 @@ public class RobotController : MonoBehaviour
     private float diviation_now = 0;  //現在の偏差
 
     private float diviation_before = 0; //1フレーム前の偏差
+
+    private float integral = 0;
     
     // Start is called before the first frame update
     void Start()
@@ -58,9 +60,9 @@ public class RobotController : MonoBehaviour
         diviation_before = diviation_now;  
         diviation_now = illumSensor.illuminance - threshold;  //現在の偏差を求める
         
-        Debug.Log("diviation" + diviation_now);
+        Debug.Log("diviation  " + diviation_now);
 
-        var integral = (diviation_before + diviation_now) * Time.deltaTime / 2;
+        integral += (diviation_before + diviation_now) * Time.deltaTime / 2;
 
         var p = kp * diviation_now;
         var i = ki * integral;
