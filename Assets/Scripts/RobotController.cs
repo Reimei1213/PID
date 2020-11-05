@@ -1,95 +1,86 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-/// <summary>
-/// ロボット制御
-/// </summary>
-public class RobotController : MonoBehaviour {
-    /// <summary>
-    /// 左車輪
-    /// </summary>
-    [SerializeField]
-    private HingeJoint wheelLeft;
-    /// <summary>
-    /// 右車輪
-    /// </summary>
+public class RobotController : MonoBehaviour
+{
     [SerializeField]
     private HingeJoint wheelRight;
-    /// <summary>
-    /// 照度センサ
-    /// </summary>
+    
+    [SerializeField]
+    private HingeJoint wheelLeft;
+    
     [SerializeField]
     private IlluminanceSensor illumSensor;
 
-    /// <summary>
-    /// 目標速度
-    /// </summary>
     [SerializeField]
-    private float speed = 500;
-
-    /// <summary>
-    /// 照度センサ閾値
-    /// </summary>
+    private float speed;
+    
     [SerializeField]
-    private float threshold = 0.5f;
-
-    /// <summary>
-    /// 比例ゲイン
-    /// </summary>
+    private float kp;
+    
     [SerializeField]
-    private float kp = 1500;
-    /// <summary>
-    /// 積分ゲイン
-    /// </summary>
+    private float ki;
+    
     [SerializeField]
-    private float ki = 500000;
-    /// <summary>
-    /// 微分ゲイン
-    /// </summary>
-    [SerializeField]
-    private float kd = 500;
+    private float kd;
 
-    /// <summary>
-    /// 制御偏差の積分値
-    /// </summary>
-    private float errorInt = 0;
+    [SerializeField] 
+    private float threshold ;  //閾値
+    
+    private float diviation_now = 0;  //現在の偏差
 
-    /// <summary>
-    /// 1フレーム前の制御偏差
-    /// </summary>
-    private float errorPrev = 0;
-
-    /// <summary>
-    /// 照度センサ値に基づくフィードバック制御
-    /// </summary>
-    private void Update() {
-        // 制御偏差計算
-        var error = threshold - illumSensor.illuminance;
-
-        // 制御偏差の微積分値計算
-        errorInt = (error + errorPrev) * Time.deltaTime / 2;
-        var errorDiff = (error - errorPrev) / Time.deltaTime;
-
-        // 制御量計算(PID制御)
-        var output = kp * error + ki * errorInt + kd * errorDiff;
-
-        // 車輪目標速度設定
-        JointMotor motor = wheelLeft.motor;
-        //motor.targetVelocity = speed - output;
+    private float diviation_before = 0; //1フレーム前の偏差
+    
+    // Start is called before the first frame update
+    void Start()
+    {
+        /*
+        int targetVel = 90;
         
-        motor.force = -50;
-        motor.targetVelocity = 900;
+        JointMotor motor = wheelRight.motor;
+        //motor.force = 50;
+        //motor.targetVelocity = targetVel;
         motor.freeSpin = false;
-        wheelLeft.motor = motor;
-        wheelLeft.useMotor = true;
-        
-
-        motor = wheelRight.motor;
-        motor.targetVelocity = speed + output;
         wheelRight.motor = motor;
 
-        errorPrev = error;
+        motor = wheelLeft.motor;
+        motor.force = 50;
+        //motor.targetVelocity = -targetVel;
+        motor.freeSpin = false;
+        wheelLeft.motor = motor;
+        */
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        diviation_before = diviation_now;  
+        diviation_now = illumSensor.illuminance - threshold;  //現在の偏差を求める
         
-        Debug.Log(wheelLeft.motor);
+        Debug.Log("diviation" + diviation_now);
+
+        var integral = (diviation_before + diviation_now) * Time.deltaTime / 2;
+
+        var p = kp * diviation_now;
+        var i = ki * integral;
+        var d = kd * (diviation_now - diviation_before) / Time.deltaTime;
+
+        var power = p + i + d;  //PIDの出力
+        
+        Debug.Log(power);
+        
+        var output = -(speed - power);
+        
+        JointMotor motor = wheelRight.motor;
+        motor.targetVelocity = output;
+        wheelRight.motor = motor;
+        Debug.Log("Right  " + output);
+
+        output = speed + power;
+        motor = wheelLeft.motor;
+        motor.targetVelocity = output;
+        wheelLeft.motor = motor;
+        Debug.Log("Left  " + output);
     }
 }
