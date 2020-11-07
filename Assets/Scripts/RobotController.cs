@@ -73,6 +73,8 @@ public class RobotController : MonoBehaviour
         Debug.Log(power);
         
         var output = -(speed - power);
+        //var output = (speed - power);
+
         
         JointMotor motor = wheelRight.motor;
         motor.targetVelocity = output;
